@@ -32,8 +32,10 @@ $routes->set404Override();
 $routes->get('/', 'Home::index');
 
 $routes->get('login', 'Auth\AuthController::index');
+$routes->get('logout', 'Auth\AuthController::logout');
+$routes->post('auth', 'Auth\AuthController::auth');
 
-$routes->group('chef', function ($routes){
+$routes->group('chef', ['filter' => 'role'], static function ($routes){
     $routes->get('dashboard', 'Chef\DashboardController::index');
     $routes->get('list-menu', 'Chef\ListMenuController::index');
     $routes->get('create-menu', 'Chef\ListMenuController::create');
@@ -47,17 +49,17 @@ $routes->group('chef', function ($routes){
 
 });
 
-$routes->group('kasir', function ($routes){
+$routes->group('kasir', ['filter' => 'role'],  static function ($routes){
     $routes->get('dashboard', 'Kasir\DashboardController::index');
     $routes->get('transaksi', 'Kasir\TransaksiController::index');
     $routes->get('transaksi/(:any)', 'Kasir\TransaksiController::detail/$1');
 
 });
-$routes->group('pemilik', function ($routes){
+$routes->group('pemilik', ['filter' => 'role'], static function ($routes){
     $routes->get('dashboard', 'Pemilik\DashboardController::index');
 
 });
-$routes->group('kurir', function ($routes){
+$routes->group('kurir', ['filter' => 'role'], static function ($routes){
     $routes->get('dashboard', 'Kurir\DashboardController::index');
 
 });

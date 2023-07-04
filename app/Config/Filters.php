@@ -22,6 +22,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'jwtfilter'     => \App\Filters\JWTFilters::class,
+        'role'     => \App\Filters\RoleFilter::class,
     ];
 
     /**
@@ -62,5 +63,6 @@ class Filters extends BaseConfig
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
     public array $filters = [
+        'role'     => \App\Filters\RoleFilter::class,
     ];
 }
