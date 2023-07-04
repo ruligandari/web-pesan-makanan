@@ -48,7 +48,7 @@
                     <td><?= $item['no_order']?></td>
                     <td><?= $item['total_harga']?></td>
                     <td><?= $item['status']?></td>
-                    <td> <img src="data:image/<?= $item['qrcode']?>" height="40" width="40"></td>
+                    <td> <img src="data:image/<?= $item['qr_code']?>" height="40" width="40"></td>
                     <td><span class="badge bg-success text-light"><?= $item['tgl_transaksi']?></span></td>
                     <td>
                       <a href="<?= base_url('chef/detail-pesanan/'.$item['no_order'])?>" class="btn btn-primary"><i class="bi bi-eye"></i></a>
