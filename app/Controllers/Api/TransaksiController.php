@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Controllers\BaseController;
 use App\Models\OrderModel;
 use App\Models\TransaksiModel;
+use App\Models\UserModel;
 use \Config\Services;
 use CodeIgniter\API\ResponseTrait;
 use Exception;
@@ -28,7 +29,7 @@ class TransaksiController extends BaseController
 
         $orderItem = new OrderModel();
         $transaksi = new TransaksiModel();
-        
+
         $jsonPayload = $request->getVar();
         if (empty($jsonPayload)) {
             return $this->fail('Data Tidak Ditemukan', 400);
@@ -43,46 +44,52 @@ class TransaksiController extends BaseController
         $hargaTotal = $jsonPayload->total_harga;
         $status = $jsonPayload->status;
 
-            $data_transaksi = [
-                'no_transaksi' => $noTransaksi,
-                'no_order' => generateNoOrder($tahun),
-                'nama_pembeli' => $namaPembeli,
-                'total_harga' => $hargaTotal,
-                'tgl_transaksi' => $tglTransaksi,
-                'status' => $status,
-                'qr_code' => generateQrCode($enkripsiNoTransaksi)
+        $data_transaksi = [
+            'no_transaksi' => $noTransaksi,
+            'no_order' => generateNoOrder($tahun),
+            'nama_pembeli' => $namaPembeli,
+            'total_harga' => $hargaTotal,
+            'tgl_transaksi' => $tglTransaksi,
+            'status' => $status,
+            'qr_code' => generateQrCode($enkripsiNoTransaksi)
+        ];
+        try {
+            $transaksi->insert($data_transaksi);
+        } catch (Exception $e) {
+            return $this->fail('Gagal Menambahkan Data', 400);
+        }
+
+        foreach ($itemsOrder as $item) {
+            $orders = [
+                'no_order' => $data_transaksi['no_order'],
+                'nama_produk' =>  $item->nama_produk,
+                'kuantitas_produk' => $item->kuantitas,
+                'harga_produk' => $item->harga_produk,
             ];
             try {
-                $transaksi->insert($data_transaksi);
-            } catch (Exception $e)
-            {
+                $orderItem->insert($orders);
+            } catch (Exception $e) {
                 return $this->fail('Gagal Menambahkan Data', 400);
             }
+        }
+        $data = [
+            'messages' => "Transaksi Berhasil, Tunjukan QR Code ini ke Kasir",
+            'qrcode' => generateQrCode($enkripsiNoTransaksi),
+        ];
 
-            foreach($itemsOrder as $item){
-                $orders = [
-                    'no_order' => $data_transaksi['no_order'],
-                    'nama_produk' =>  $item->nama_produk,
-                    'kuantitas_produk' => $item->kuantitas,
-                    'harga_produk' => $item->harga_produk,
-                ];
-                try{
-                    $orderItem->insert($orders);
-                } catch (Exception $e){
-                    return $this->fail('Gagal Menambahkan Data', 400);
-                }
-                
-            }
-            $data = [
-                'messages' => "Transaksi Berhasil, Tunjukan QR Code ini ke Kasir",
-                'qrcode' => generateQrCode($enkripsiNoTransaksi),
-            ];
-            
-            return $this->respond($data, 200);
-            
+        return $this->respond($data, 200);
     }
 
-    public function view(){
-
+    public function getTransaksiById($id)
+    {
+        $transaksi = new TransaksiModel();
+        $user = new UserModel();
+        $getNamaUser = $user->find($id);
+        if ($getNamaUser) {
+            $getDataOrder = $transaksi->where('nama_pembeli', $getNamaUser['nama'])->findAll();
+            return $this->respond($getDataOrder, 200);
+        } else {
+            return $this->fail("Belum Ada Transaksi", 400);
+        }
     }
 }

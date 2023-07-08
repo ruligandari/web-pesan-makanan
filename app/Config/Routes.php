@@ -35,7 +35,7 @@ $routes->get('login', 'Auth\AuthController::index');
 $routes->get('logout', 'Auth\AuthController::logout');
 $routes->post('auth', 'Auth\AuthController::auth');
 
-$routes->group('chef', ['filter' => 'role'], static function ($routes){
+$routes->group('chef', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Chef\DashboardController::index');
     $routes->get('list-menu', 'Chef\ListMenuController::index');
     $routes->get('create-menu', 'Chef\ListMenuController::create');
@@ -46,22 +46,18 @@ $routes->group('chef', ['filter' => 'role'], static function ($routes){
     $routes->post('update-menu/(:any)', 'Chef\ListMenuController::update/$1');
     $routes->get('list-pesanan', 'Chef\ListPesananController::index');
     $routes->get('detail-pesanan/(:any)/(:any)/(:any)', 'Chef\ListPesananController::detail/$1/$2/$3');
-
 });
 
-$routes->group('kasir', ['filter' => 'role'],  static function ($routes){
+$routes->group('kasir', ['filter' => 'role'],  static function ($routes) {
     $routes->get('dashboard', 'Kasir\DashboardController::index');
     $routes->get('transaksi', 'Kasir\TransaksiController::index');
     $routes->get('transaksi/(:any)', 'Kasir\TransaksiController::detail/$1');
-
 });
-$routes->group('pemilik', ['filter' => 'role'], static function ($routes){
+$routes->group('pemilik', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Pemilik\DashboardController::index');
-
 });
-$routes->group('kurir', ['filter' => 'role'], static function ($routes){
+$routes->group('kurir', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Kurir\DashboardController::index');
-
 });
 
 
@@ -75,11 +71,10 @@ $routes->group('auth', function ($routes) {
 });
 
 $routes->group('api', ['filter' => 'jwtfilter'], function ($routes) {
-   $routes->get('makanan', 'Api\MakananController::index');
-   $routes->get('makanan/(:any)', 'Api\MakananController::detail/$1');
-   $routes->post('transaksi', 'Api\TransaksiController::index');
-   $routes->get('transaksi/(:any)', 'Api\TransaksiController:index/$1');
-
+    $routes->get('makanan', 'Api\MakananController::index');
+    $routes->get('makanan/(:any)', 'Api\MakananController::detail/$1');
+    $routes->post('transaksi', 'Api\TransaksiController::index');
+    $routes->get('transaksi/(:any)', 'Api\TransaksiController::getTransaksiById/$1');
 });
 /*
  * --------------------------------------------------------------------

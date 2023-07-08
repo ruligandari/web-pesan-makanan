@@ -30,24 +30,29 @@ class AuthController extends BaseController
         $password = $this->request->getVar('password');
         $userModel = new UserModel();
         $user = $userModel->where('email', $email)->first();
-         if ($user){
-            if (password_verify($password, $user['password'])){
+
+        if ($user) {
+            if (password_verify($password, $user['password'])) {
+                $datas = [
+                    'user_id' => $user['id'],
+                    'nama' => $user['nama'],
+                ];
                 helper('jwt');
                 $jwt = createJWT($email);
                 $dataResponse = [
                     'status' => 200,
                     'message' => 'Login Berhasil',
+                    'data' => $datas,
                     'token' => $jwt,
-                   
+
                 ];
                 return $this->respond($dataResponse, 200);
-            }else{
+            } else {
                 return $this->fail('Email atau Password Tidak ditemukan', 400);
             }
-         } else {
+        } else {
             return $this->fail('Email atau Password Tidak ditemukan', 400);
-         }
-
+        }
     }
 
     public function register()

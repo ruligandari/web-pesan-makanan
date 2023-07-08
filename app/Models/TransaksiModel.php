@@ -44,13 +44,16 @@ class TransaksiModel extends Model
         // buat relasi dari tabel transaksi ke tabel order build
         $result = $this->join('order', 'order.no_order = transaksi.no_order');
         return $result->where('transaksi.no_order', $id)->findAll();
-    
     }
     public function getByNoTransaksi($id)
     {
         // buat relasi dari tabel transaksi ke tabel order build
         $result = $this->join('order', 'order.no_order = transaksi.no_order');
         return $result->where('transaksi.no_transaksi', $id)->find();
-    
+    }
+    public function getAllTransaksiByUser($id)
+    {
+        // buat relasi dengan tabel user dengan id untuk mendapatkan nama
+
     }
 }
