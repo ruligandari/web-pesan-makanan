@@ -92,4 +92,18 @@ class TransaksiController extends BaseController
             return $this->fail("Belum Ada Transaksi", 400);
         }
     }
+
+    public function detailOrder()
+    {
+        $noOrder = $this->request->getVar('no_order');
+        $orderItem = new OrderModel();
+        $getOrderItem = $orderItem->where('no_order', $noOrder)->findAll();
+        if (!$getOrderItem) {
+            return $this->fail("Tidak Ada Order", 400);
+        }
+        $data = [
+            'data' => $getOrderItem,
+        ];
+        return $this->respond($data, 200);
+    }
 }
