@@ -76,6 +76,7 @@ $routes->group('api', ['filter' => 'jwtfilter'], function ($routes) {
     $routes->post('transaksi', 'Api\TransaksiController::index');
     $routes->get('transaksi/(:any)', 'Api\TransaksiController::getTransaksiById/$1');
     $routes->post('order', 'Api\TransaksiController::detailOrder');
+    $routes->get('user/(:any)', 'Api\UserController::getUser/$1');
 });
 /*
  * --------------------------------------------------------------------
