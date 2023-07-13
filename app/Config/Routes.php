@@ -80,6 +80,7 @@ $routes->group('api', ['filter' => 'jwtfilter'], function ($routes) {
     $routes->post('keranjang', 'Api\KeranjangController::index');
     $routes->get('keranjang', 'Api\KeranjangController::getAllKeranjang');
     $routes->get('keranjang/(:any)', 'Api\KeranjangController::getKeranjang/$1');
+    $routes->post('keranjang/update', 'Api\KeranjangController::updateKeranjang');
     $routes->delete('keranjang/(:any)', 'Api\KeranjangController::delete/$1');
 });
 /*

@@ -65,6 +65,26 @@ class KeranjangController extends BaseController
         }
     }
 
+    public function updateKeranjang()
+    {
+        $keranjangModel = new KeranjangModel();
+        $id = $this->request->getPost('id_keranjang');
+        $kuantitas = $this->request->getVar('kuantitas');
+
+        $update = $keranjangModel->where('id_keranjang', $id)->set([
+            'kuantitas' => $kuantitas
+        ])->update();
+
+        if ($update) {
+            return $this->respond([
+                'status' => 200,
+                'message' => 'Berhasil Mengubah Keranjang',
+            ], 200);
+        } else {
+            return $this->fail('Gagal Mengubah Keranjang', 400);
+        }
+    }
+
     public function delete($id)
     {
         $keranjangModel = new KeranjangModel();
