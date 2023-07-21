@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
+use App\Models\KeranjangModel;
 use App\Models\OrderModel;
 use App\Models\TransaksiModel;
 use App\Models\UserModel;
@@ -75,6 +76,92 @@ class TransaksiController extends BaseController
         $data = [
             'messages' => "Transaksi Berhasil, Tunjukan QR Code ini ke Kasir",
             'qrcode' => generateQrCode($enkripsiNoTransaksi),
+        ];
+
+        return $this->respond($data, 200);
+    }
+
+    public function addTransaksi()
+    {
+        helper('qrcode');
+        helper('order');
+        helper('transaksi');
+        $tahun = date('Y');
+        $idUser = $this->request->getVar('id_user');
+        $status = $this->request->getVar('status');
+        $total = $this->request->getVar('total');
+
+        $transaksi = new TransaksiModel();
+        $user = new UserModel();
+        $keranjang = new KeranjangModel();
+        $orders = new OrderModel();
+
+        // switch status
+        switch ($status) {
+            case 1:
+                $status = 'Dilevery';
+                break;
+            case 2:
+                $status = 'Dine In';
+                break;
+            case 3:
+                $status = 'Take Away';
+                break;
+            default:
+                $status = 'Belum Ada Status';
+                break;
+        }
+        // insert data ke tabel transaksi
+        $dataTransaksi = [
+            'no_transaksi' => generateNoTransaksi($tahun),
+            'no_order' => generateNoOrder($tahun),
+            'nama_pembeli' => $user->find($idUser)['nama'],
+            'total_harga' => $total,
+            'tgl_transaksi' => date('Y-m-d H:i:s'),
+            'status' => $status,
+            'qr_code' => generateQrCode(base64_encode(generateNoTransaksi($tahun)))
+        ];
+        try {
+            $transaksi->insert($dataTransaksi);
+        } catch (Exception $e) {
+            return $this->fail("Gagal Menambahkan Data", 400);
+        }
+
+        // insert data dikeranjang ke order
+        $getKeranjang = $keranjang->getKeranjang($idUser);
+        $data = [];
+        foreach ($getKeranjang as $item) {
+            $datas = [
+                'no_order' => generateNoOrder($tahun),
+                'nama_produk' => $item['nama_produk'],
+                'kuantitas_produk' => $item['kuantitas'],
+                'harga_produk' => $item['harga'],
+            ];
+
+            $data[] = $datas;
+        }
+        try {
+            if (count($data) > 1) {
+                # code...
+                $orders->insertBatch($data);
+            } else {
+                $orders->insert($data);
+            }
+        } catch (Exception $e) {
+            return $this->fail("Gagal Menambahkan Data Order", 400);
+        }
+
+        // hapus data di keranjang
+        try {
+            // delete data keranjang berdasarkan id user
+            $keranjang->where('id_user', $idUser)->delete();
+        } catch (\Throwable $th) {
+            return $this->fail("Gagal Menghapus Data Keranjang", 400);
+        }
+
+        $data = [
+            'messages' => "Transaksi Berhasil, Tunjukan QR Code ini ke Kasir",
+            'qrcode' => generateQrCode(base64_encode(generateNoTransaksi($tahun))),
         ];
 
         return $this->respond($data, 200);
