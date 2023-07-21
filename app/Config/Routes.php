@@ -78,6 +78,7 @@ $routes->group('api', ['filter' => 'jwtfilter'], function ($routes) {
     $routes->post('order', 'Api\TransaksiController::detailOrder');
     $routes->get('user/(:any)', 'Api\UserController::getUser/$1');
     $routes->post('keranjang', 'Api\KeranjangController::index');
+    $routes->post('keranjang/total', 'Api\KeranjangController::totalKeranjang');
     $routes->get('keranjang', 'Api\KeranjangController::getAllKeranjang');
     $routes->get('keranjang/(:any)', 'Api\KeranjangController::getKeranjang/$1');
     $routes->post('keranjang/update', 'Api\KeranjangController::updateKeranjang');

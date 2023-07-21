@@ -98,4 +98,20 @@ class KeranjangController extends BaseController
             return $this->fail('Gagal Menghapus Keranjang', 400);
         }
     }
+
+    public function totalKeranjang()
+    {
+        $keranjangModel = new KeranjangModel();
+        $id_user = $this->request->getPost('id_user');
+        // mengambil data keranjang berdasarkan id user kemudian mengembalikan total data
+        $total = $keranjangModel->where('id_user', $id_user)->countAllResults();
+
+        return $this->respond([
+            'status' => 200,
+            'message' => 'Berhasil Mendapatkan Data Keranjang',
+            'data' => [
+                'total' => $total,
+            ]
+        ], 200);
+    }
 }

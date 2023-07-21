@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Controllers\BaseController;
 use App\Models\KeranjangModel;
+use App\Models\MakananModel;
 use App\Models\OrderModel;
 use App\Models\TransaksiModel;
 use App\Models\UserModel;
@@ -95,6 +96,7 @@ class TransaksiController extends BaseController
         $user = new UserModel();
         $keranjang = new KeranjangModel();
         $orders = new OrderModel();
+        $makanan = new MakananModel();
 
         // switch status
         switch ($status) {
@@ -111,6 +113,48 @@ class TransaksiController extends BaseController
                 $status = 'Belum Ada Status';
                 break;
         }
+        // insert data dikeranjang ke order
+        $getKeranjang = $keranjang->getKeranjang($idUser);
+        if (count($getKeranjang) > 1 && $getKeranjang != null) {
+            $data = [];
+            foreach ($getKeranjang as $item) {
+                $datas = [
+                    'no_order' => generateNoOrder($tahun),
+                    'nama_produk' => $item['nama_produk'],
+                    'kuantitas_produk' => $item['kuantitas'],
+                    'harga_produk' => $item['harga'],
+                ];
+
+                $kuantitas = $datas['kuantitas_produk'];
+
+                $makanan->where('id', $item['id'])->set('stok', "stok - $kuantitas", false)->update();
+
+                $data[] = $datas;
+            }
+            try {
+                $orders->insertBatch($data);
+            } catch (Exception $e) {
+                return $this->fail($e, 400);
+            }
+        } else if (count($getKeranjang) == 1 && $getKeranjang != null) {
+            $data = [
+                'no_order' => generateNoOrder($tahun),
+                'nama_produk' => $getKeranjang[0]['nama_produk'],
+                'kuantitas_produk' => $getKeranjang[0]['kuantitas'],
+                'harga_produk' => $getKeranjang[0]['harga'],
+            ];
+            try {
+                $orders->insert($data);
+                $id_produk = $getKeranjang[0]['id'];
+                $kuantitas_produk = $getKeranjang[0]['kuantitas'];
+                $makanan->where('id', $id_produk)->set('stok', "stok - $kuantitas_produk", false)->update();
+            } catch (Exception $e) {
+                return $this->fail($e, 400);
+            }
+        } else {
+            return $this->fail("Keranjang Kosong", 400);
+        }
+
         // insert data ke tabel transaksi
         $dataTransaksi = [
             'no_transaksi' => generateNoTransaksi($tahun),
@@ -127,29 +171,9 @@ class TransaksiController extends BaseController
             return $this->fail("Gagal Menambahkan Data", 400);
         }
 
-        // insert data dikeranjang ke order
-        $getKeranjang = $keranjang->getKeranjang($idUser);
-        $data = [];
-        foreach ($getKeranjang as $item) {
-            $datas = [
-                'no_order' => generateNoOrder($tahun),
-                'nama_produk' => $item['nama_produk'],
-                'kuantitas_produk' => $item['kuantitas'],
-                'harga_produk' => $item['harga'],
-            ];
+        // update stok dengan data dari keranjang
 
-            $data[] = $datas;
-        }
-        try {
-            if (count($data) > 1) {
-                # code...
-                $orders->insertBatch($data);
-            } else {
-                $orders->insert($data);
-            }
-        } catch (Exception $e) {
-            return $this->fail("Gagal Menambahkan Data Order", 400);
-        }
+
 
         // hapus data di keranjang
         try {
@@ -163,6 +187,7 @@ class TransaksiController extends BaseController
             'messages' => "Transaksi Berhasil, Tunjukan QR Code ini ke Kasir",
             'qrcode' => generateQrCode(base64_encode(generateNoTransaksi($tahun))),
         ];
+
 
         return $this->respond($data, 200);
     }
