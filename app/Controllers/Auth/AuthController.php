@@ -25,11 +25,11 @@ class AuthController extends BaseController
 
         // proses login
         $getEmail = $adminModel->where('email', $email)->find();
-        if ($getEmail){
+        if ($getEmail) {
 
             $verifyPassword = password_verify($password, $getEmail[0]['password']);
 
-            if ($verifyPassword){
+            if ($verifyPassword) {
 
                 session()->set('id', $getEmail[0]['id']);
                 session()->set('nama', $getEmail[0]['nama']);
@@ -37,23 +37,22 @@ class AuthController extends BaseController
                 session()->set('role', $getEmail[0]['role']);
                 session()->set('isLoggedIn', true);
 
-                 switch (session('role')){
-                    case 1 :
+                switch (session('role')) {
+                    case 1:
                         return redirect('pemilik/dashboard');
                         break;
-                    case 2 :
+                    case 2:
                         return redirect('kasir/dashboard');
                         break;
-                    case 3 :
+                    case 3:
                         return redirect('chef/dashboard');
                         break;
-                 }
+                }
             } else {
                 return redirect()->to('login')->with('error', 'Email atau Katasandi salah');
             }
-        }else {
+        } else {
             return redirect()->to('login')->with('error', 'Email atau Katasandi salah');
-
         }
     }
 
