@@ -115,11 +115,12 @@ class TransaksiController extends BaseController
         }
         // insert data dikeranjang ke order
         $getKeranjang = $keranjang->getKeranjang($idUser);
+        $no_order = generateNoOrder($tahun);
         if (count($getKeranjang) > 1 && $getKeranjang != null) {
             $data = [];
             foreach ($getKeranjang as $item) {
                 $datas = [
-                    'no_order' => generateNoOrder($tahun),
+                    'no_order' => $no_order,
                     'nama_produk' => $item['nama_produk'],
                     'kuantitas_produk' => $item['kuantitas'],
                     'harga_produk' => $item['harga'],
@@ -138,7 +139,7 @@ class TransaksiController extends BaseController
             }
         } else if (count($getKeranjang) == 1 && $getKeranjang != null) {
             $data = [
-                'no_order' => generateNoOrder($tahun),
+                'no_order' => $no_order,
                 'nama_produk' => $getKeranjang[0]['nama_produk'],
                 'kuantitas_produk' => $getKeranjang[0]['kuantitas'],
                 'harga_produk' => $getKeranjang[0]['harga'],
@@ -158,7 +159,7 @@ class TransaksiController extends BaseController
         // insert data ke tabel transaksi
         $dataTransaksi = [
             'no_transaksi' => generateNoTransaksi($tahun),
-            'no_order' => generateNoOrder($tahun),
+            'no_order' => $no_order,
             'nama_pembeli' => $user->find($idUser)['nama'],
             'total_harga' => $total,
             'tgl_transaksi' => date('Y-m-d H:i:s'),
@@ -170,9 +171,6 @@ class TransaksiController extends BaseController
         } catch (Exception $e) {
             return $this->fail("Gagal Menambahkan Data", 400);
         }
-
-        // update stok dengan data dari keranjang
-
 
 
         // hapus data di keranjang
