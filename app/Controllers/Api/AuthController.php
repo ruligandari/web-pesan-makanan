@@ -58,10 +58,12 @@ class AuthController extends BaseController
     public function register()
     {
         // membuat logika register dengan rest api
+        $password = $this->request->getVar('password');
+        $confirm_password = $this->request->getVar('confirm_password');
         $data = [
             'nama' => $this->request->getPost('nama'),
             'email' => $this->request->getPost('email'),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            'password' => password_hash($password, PASSWORD_DEFAULT),
             'alamat' => $this->request->getPost('alamat'),
             'no_telp' => $this->request->getPost('no_telp'),
         ];
@@ -72,6 +74,7 @@ class AuthController extends BaseController
             'nama' => 'required',
             'email' => 'required|valid_email|is_unique[user.email]',
             'password' => 'required|min_length[8]',
+            'confirm_password' => 'required|matches[password]',
             'alamat' => 'required',
             'no_telp' => 'required',
         ]);
