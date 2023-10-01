@@ -11,23 +11,40 @@ class ListPesananController extends BaseController
         $listPesanan = new \App\Models\TransaksiModel();
         $data = [
             'title' => 'List Pesanan',
-            'listpesanan' => $listPesanan->findAll()
+            // tambahkan order descending
+            'listpesanan' => $listPesanan->orderBy('id', 'DESC')->findAll(),
         ];
 
         return view('chef/list-pesanan/index', $data);
-
     }
 
-    public function detail($s1, $s2, $s3)
+    public function detail($id)
     {
-        $noOrder = $s1.'/'.$s2.'/'.$s3;
         $listPesanan = new \App\Models\TransaksiModel();
+        $noOrder = $listPesanan->select('no_order')->where('id', $id)->first();
+        $status_pesanan = $listPesanan->select('status_pesanan')->where('id', $id)->first();
         $no_order = $listPesanan->getTransaksi($noOrder);
         $data = [
             'title' => 'Detail Pesanan',
             'listpesanan' => $no_order,
+            'id' => $id,
+            'status_pesanan' => $status_pesanan
         ];
 
         return view('chef/list-pesanan/detail', $data);
+    }
+
+    public function updateStatus()
+    {
+        $request = service('request');
+
+        // dapatkan id dari /chef/detail-pesanan/(:any)
+
+        $id = $this->request->getPost('id');
+        $status = 'Diproses';
+        $listPesanan = new \App\Models\TransaksiModel();
+        $listPesanan->update($id, ['status_pesanan' => $status]);
+        session()->setFlashdata('success', 'Status Pesanan Berhasil Diubah');
+        return redirect()->to(base_url('chef/list-pesanan'));
     }
 }

@@ -45,13 +45,15 @@ $routes->group('chef', ['filter' => 'role'], static function ($routes) {
     $routes->get('update-stok/(:any)', 'Chef\ListMenuController::stok/$1');
     $routes->post('update-menu/(:any)', 'Chef\ListMenuController::update/$1');
     $routes->get('list-pesanan', 'Chef\ListPesananController::index');
-    $routes->get('detail-pesanan/(:any)/(:any)/(:any)', 'Chef\ListPesananController::detail/$1/$2/$3');
+    $routes->get('detail-pesanan/(:any)', 'Chef\ListPesananController::detail/$1');
+    $routes->post('update-status', 'Chef\ListPesananController::updateStatus');
 });
 
 $routes->group('kasir', ['filter' => 'role'],  static function ($routes) {
     $routes->get('dashboard', 'Kasir\DashboardController::index');
     $routes->get('transaksi', 'Kasir\TransaksiController::index');
     $routes->get('transaksi/(:any)', 'Kasir\TransaksiController::detail/$1');
+    $routes->post('bayar', 'Kasir\TransaksiController::bayar');
 });
 $routes->group('pemilik', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Pemilik\DashboardController::index');

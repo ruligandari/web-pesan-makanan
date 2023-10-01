@@ -164,6 +164,7 @@ class TransaksiController extends BaseController
             'total_harga' => $total,
             'tgl_transaksi' => date('Y-m-d H:i:s'),
             'status' => $status,
+            'status_pesanan' => 'Pesanan Berhasil',
             'qr_code' => generateQrCode(base64_encode(generateNoTransaksi($tahun)))
         ];
         try {

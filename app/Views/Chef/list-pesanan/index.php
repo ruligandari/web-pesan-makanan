@@ -1,76 +1,78 @@
-<?= $this->extend('layouts/main-layouts');?>
+<?= $this->extend('layouts/main-layouts'); ?>
 
-<?= $this->section('content');?>
+<?= $this->section('content'); ?>
 <section class="section dashboard">
-      <div class="row">
+  <div class="row">
 
-        <!-- Left side columns -->
-        <div class="col-lg-12">
-          <div class="row">
-            <!-- Reports -->
-            <div class="col-12">
-              <!-- set flash data -->
-                <?php
-                // Cek apakah terdapat session nama message
-                if(session()->getFlashdata('success')){ ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?= session()->getFlashdata('success');?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <?php }elseif(session()->getFlashdata('error')){?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= session()->getFlashdata('error');?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <?php }?>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">List Pesanan</h5>
-                  <table class="table datatable">
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+      <div class="row">
+        <!-- Reports -->
+        <div class="col-12">
+          <!-- set flash data -->
+          <?php
+          // Cek apakah terdapat session nama message
+          if (session()->getFlashdata('success')) { ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <?= session()->getFlashdata('success'); ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          <?php } elseif (session()->getFlashdata('error')) { ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <?= session()->getFlashdata('error'); ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          <?php } ?>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">List Pesanan</h5>
+              <table class="table datatable">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Nama Pembeli</th>
                     <th scope="col">Nomor Order</th>
                     <th scope="col">Total Harga</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Jenis Pesanan</th>
+                    <th scope="col">Status Pesanan</th>
                     <th scope="col">QR</th>
                     <th scope="col">Tgl</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $no = 1;?>
-                  <?php foreach($listpesanan as $item):?>
-                  <tr>
-                    <th scope="row"><?= $no++?></th>
-                    <td><?= $item['nama_pembeli']?></td>
-                    <td><?= $item['no_order']?></td>
-                    <td><?= $item['total_harga']?></td>
-                    <td><?= $item['status']?></td>
-                    <td> <img src="data:image/<?= $item['qr_code']?>" height="40" width="40"></td>
-                    <td><span class="badge bg-success text-light"><?= $item['tgl_transaksi']?></span></td>
-                    <td>
-                      <a href="<?= base_url('chef/detail-pesanan/'.$item['no_order'])?>" class="btn btn-primary"><i class="bi bi-eye"></i></a>
-                    </td>
-                  </tr>
-                  <?php endforeach?>
+                  <?php $no = 1; ?>
+                  <?php foreach ($listpesanan as $item) : ?>
+                    <tr>
+                      <th scope="row"><?= $no++ ?></th>
+                      <td><?= $item['nama_pembeli'] ?></td>
+                      <td><?= $item['no_order'] ?></td>
+                      <td><?= $item['total_harga'] ?></td>
+                      <td><?= $item['status'] ?></td>
+                      <td><?= $item['status_pesanan'] ?></td>
+                      <td> <img src="data:image/<?= $item['qr_code'] ?>" height="40" width="40"></td>
+                      <td><span class="badge bg-success text-light"><?= $item['tgl_transaksi'] ?></span></td>
+                      <td>
+                        <a href="<?= base_url('chef/detail-pesanan/' . $item['id']) ?>" class="btn btn-primary"><i class="bi bi-eye"></i></a>
+                      </td>
+                    </tr>
+                  <?php endforeach ?>
                 </tbody>
               </table>
-                </div>
-
-              </div>
-        </div><!-- End Reports -->
+            </div>
 
           </div>
-        </div><!-- End Left side columns -->
+        </div><!-- End Reports -->
 
-        </div><!-- End Right side columns -->
+      </div>
+    </div><!-- End Left side columns -->
 
-    </section>
- 
-<?= $this->endSection();?>
+  </div><!-- End Right side columns -->
 
-<?= $this->section('script');?>
+</section>
 
-<?= $this->endSection();?>
+<?= $this->endSection(); ?>
+
+<?= $this->section('script'); ?>
+
+<?= $this->endSection(); ?>
