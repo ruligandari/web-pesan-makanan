@@ -45,7 +45,7 @@
                 <!-- dapatkan nilai dari segement url terakhir -->
 
                 <input type="hidden" name="id" value="<?= $id ?>">
-                <?php if ($status_pesanan == 'Pesanan Berhasil') : ?>
+                <?php if ($status_pesanan == 'Pesanan Berhasil' || $status_pesanan == '') : ?>
                   <button type="submit" class="btn btn-success mb-3">Proses Pesanan</button>
                 <?php endif ?>
               </form>
