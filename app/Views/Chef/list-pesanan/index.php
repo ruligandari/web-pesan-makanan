@@ -35,7 +35,6 @@
                     <th scope="col">Total Harga</th>
                     <th scope="col">Jenis Pesanan</th>
                     <th scope="col">Status Pesanan</th>
-                    <th scope="col">QR</th>
                     <th scope="col">Tgl</th>
                     <th scope="col">Action</th>
                   </tr>
@@ -50,7 +49,6 @@
                       <td><?= $item['total_harga'] ?></td>
                       <td><?= $item['status'] ?></td>
                       <td><?= $item['status_pesanan'] ?></td>
-                      <td> <img src="data:image/<?= $item['qr_code'] ?>" height="40" width="40"></td>
                       <td><span class="badge bg-success text-light"><?= $item['tgl_transaksi'] ?></span></td>
                       <td>
                         <a href="<?= base_url('chef/detail-pesanan/' . $item['id']) ?>" class="btn btn-primary"><i class="bi bi-eye"></i></a>
