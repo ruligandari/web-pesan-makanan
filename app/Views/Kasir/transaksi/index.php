@@ -219,6 +219,11 @@
             var inputContainer = document.getElementById("inputContainer");
             inputContainer.appendChild(divGroup)
           }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          alert('Qrcode tidak dikenali');
+          // reload halaman
+          location.reload();
         }
       });
 

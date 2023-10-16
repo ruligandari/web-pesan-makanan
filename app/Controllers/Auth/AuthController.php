@@ -47,6 +47,9 @@ class AuthController extends BaseController
                     case 3:
                         return redirect('chef/dashboard');
                         break;
+                    case 4:
+                        return redirect('kurir/dashboard');
+                        break;
                 }
             } else {
                 return redirect()->to('login')->with('error', 'Email atau Katasandi salah');

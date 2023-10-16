@@ -55,8 +55,14 @@ $routes->group('kasir', ['filter' => 'role'],  static function ($routes) {
     $routes->get('transaksi/(:any)', 'Kasir\TransaksiController::detail/$1');
     $routes->post('bayar', 'Kasir\TransaksiController::bayar');
 });
+
 $routes->group('pemilik', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Pemilik\DashboardController::index');
+    $routes->get('list-menu', 'Pemilik\ListMenuController::index');
+    $routes->get('list-transaksi', 'Pemilik\ListTransaksiController::index');
+    $routes->get('list-user', 'Pemilik\ListUserController::index');
+    $routes->get('tambah-user', 'Pemilik\ListUserController::create');
+    $routes->post('add', 'Pemilik\ListUserController::add');
 });
 $routes->group('kurir', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Kurir\DashboardController::index');
