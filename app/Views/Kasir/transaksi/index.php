@@ -147,97 +147,47 @@
       facingMode: "environment"
     });
 
-  // Menyimpan status pemindaian
-  var isScanned = false;
-
   // Memulai pemindaian QR Code dari webcam
   html5QrcodeScanner.render(onScanSuccess, onScanError);
 
   // Callback ketika QR Code terdeteksi
   function onScanSuccess(qrCodeMessage) {
-    if (!isScanned) {
-      console.log("Hasil pemindaian: " + qrCodeMessage);
+    console.log("Hasil pemindaian: " + qrCodeMessage);
 
-      // Lakukan tindakan lain sesuai dengan hasil pemindaian yang didapatkan
-      // Misalnya, tampilkan hasil di halaman atau lakukan pemrosesan lebih lanjut
-      result.innerHTML = qrCodeMessage;
+    // Lakukan pemanggilan AJAX untuk mengambil data transaksi
+    $.ajax({
+      url: "<?= base_url('kasir/transaksi/') ?>" + qrCodeMessage,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data) {
+        console.log(data);
 
-      $.ajax({
-        url: "<?= base_url('kasir/transaksi/') ?>" + qrCodeMessage,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data) {
+        // Tampilkan modal pembayaran
+        document.getElementById('detail').click();
+        document.getElementById('id_transaksi').value = data.id_transaksi;
+        document.getElementById('nama_pembeli').value = data.nama_pembeli;
+        document.getElementById('total_harga').value = data.total_harga;
+        document.getElementById('idTransaksi').value = data.id;
 
-          console.log(data);
-          // Klik button dengan id detail
-          document.getElementById('detail').click();
-          document.getElementById('id_transaksi').value = data.id_transaksi;
-          document.getElementById('nama_pembeli').value = data.nama_pembeli;
-          document.getElementById('total_harga').value = data.total_harga;
+        // Hitung kembalian saat jumlah bayar berubah
+        document.getElementById('jumlah_bayar').addEventListener('keyup', function() {
+          var total_harga = parseFloat(data.total_harga);
+          var jumlah_bayar = parseFloat(document.getElementById('jumlah_bayar').value);
+          var kembalian = jumlah_bayar - total_harga;
+          document.getElementById('kembalian').textContent = 'Rp. ' + kembalian;
+        });
 
-          // memasukan data.id ke value input dengan id idTransaksi
-          document.getElementById('idTransaksi').value = data.id;
-
-          document.getElementById('jumlah_bayar').addEventListener('keyup', function() {
-            var total_harga = document.getElementById('total_harga').value;
-            var jumlah_bayar = document.getElementById('jumlah_bayar').value;
-            var kembalian = jumlah_bayar - total_harga;
-            // kembalikan ke span dengan id kembalian
-            document.getElementById('kembalian').innerHTML = 'Rp. ' + kembalian;
-          });
-
-          // jika jumlah_bayar terisi tag a dengan id bayar, bisa di klik
-          document.getElementById('jumlah_bayar').addEventListener('keyup', function() {
-            var jumlah_bayar = document.getElementById('jumlah_bayar').value;
-            if (jumlah_bayar != '') {
-              document.getElementById('bayar').href = "<?= base_url('kasir/bayar/') ?>" + data.id_transaksi;
-            }
-          });
-          for (var i = 0; i < data.data_order.length; i++) {
-            var divGroup = document.createElement("div");
-            var inputText = document.createElement("input");
-            var spanText = document.createElement("span");
-            var spanText1 = document.createElement("span");
-
-            divGroup.className = "input-group mt-2";
-
-            spanText.className = "input-group-text";
-            spanText.textContent = 'x' + data.data_order[i].kuantitas_produk;
-
-            spanText1.className = "input-group-text";
-            spanText1.textContent = 'Rp. ' + data.data_order[1].harga_produk
-
-            inputText.type = "text";
-            inputText.id = "nama_produk" + (i + 1);
-            inputText.className = "form-control";
-            inputText.value = data.data_order[i].nama_produk;
-
-            divGroup.appendChild(spanText);
-            divGroup.appendChild(inputText);
-            divGroup.appendChild(spanText1);
-
-            var inputContainer = document.getElementById("inputContainer");
-            inputContainer.appendChild(divGroup)
-          }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          alert('Qrcode tidak dikenali');
-          // reload halaman
-          location.reload();
-        }
-      });
-
-      // Set status pemindaian menjadi true agar tidak berulang
-      isScanned = true;
-    }
+        // Set modal pembayaran sebagai target
+        document.getElementById('bayar').setAttribute('data-bs-target', "#bayar");
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('QR Code tidak dikenali');
+        // Reload halaman atau lakukan tindakan lain
+      }
+    });
   }
 
   // Callback ketika terjadi kesalahan saat pemindaian
   function onScanError(errorMessage) {}
-
-
-  function getDetail(id) {
-
-  }
 </script>
 <?= $this->endSection(); ?>
