@@ -24,10 +24,6 @@ class TransaksiController extends BaseController
         $modelTransaksi = new TransaksiModel();
 
         $decodeNoTransaksi = base64_decode($id);
-
-        if (!$decodeNoTransaksi) {
-            return json_encode(['status' => false, 'message' => 'No Transaksi tidak ditemukan']);
-        }
         $getTransaksi = $modelTransaksi->find($decodeNoTransaksi);
         $getID = $getTransaksi['id'];
         $noOrder = $getTransaksi['no_order'];

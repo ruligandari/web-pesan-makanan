@@ -48,8 +48,8 @@
                       <td><?= $item['no_order'] ?></td>
                       <td><?= $item['total_harga'] ?></td>
                       <td><?= $item['status'] ?></td>
-                      <td><?= $item['status_pesanan'] ?></td>
-                      <td><span class="badge bg-success text-light"><?= $item['tgl_transaksi'] ?></span></td>
+                      <td><span class="badge bg-success text-light"><?= $item['status_pesanan'] ?></span></td>
+                      <td><?= $item['tgl_transaksi'] ?></td>
                       <td>
                         <a href="<?= base_url('chef/detail-pesanan/' . $item['id']) ?>" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                       </td>

@@ -23,12 +23,13 @@ class ListPesananController extends BaseController
         $listPesanan = new \App\Models\TransaksiModel();
         $noOrder = $listPesanan->select('no_order')->where('id', $id)->first();
         $status_pesanan = $listPesanan->select('status_pesanan')->where('id', $id)->first();
+        $pesanan = $status_pesanan['status_pesanan'];
         $no_order = $listPesanan->getTransaksi($noOrder);
         $data = [
             'title' => 'Detail Pesanan',
             'listpesanan' => $no_order,
             'id' => $id,
-            'status_pesanan' => $status_pesanan
+            'status_pesanan' => $pesanan,
         ];
 
         return view('chef/list-pesanan/detail', $data);

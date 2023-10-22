@@ -40,15 +40,15 @@
                   </tr>
                 </tfoot>
               </table>
+              <?php if ($status_pesanan == 'Pesanan Berhasil') : ?>
 
-              <form action="<?= base_url('chef/update-status') ?>" method="post">
-                <!-- dapatkan nilai dari segement url terakhir -->
+                <form action="<?= base_url('chef/update-status') ?>" method="post">
+                  <!-- dapatkan nilai dari segement url terakhir -->
 
-                <input type="hidden" name="id" value="<?= $id ?>">
-                <?php if ($status_pesanan == 'Pesanan Berhasil' || $status_pesanan == '') : ?>
+                  <input type="hidden" name="id" value="<?= $id ?>">
                   <button type="submit" class="btn btn-success mb-3">Proses Pesanan</button>
-                <?php endif ?>
-              </form>
+                </form>
+              <?php endif; ?>
             </div>
 
           </div>

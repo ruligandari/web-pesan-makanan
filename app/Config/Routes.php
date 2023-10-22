@@ -66,6 +66,8 @@ $routes->group('pemilik', ['filter' => 'role'], static function ($routes) {
 });
 $routes->group('kurir', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Kurir\DashboardController::index');
+    $routes->post('list-antar', 'Kurir\DashboardController::listAntar');
+    $routes->post('antar', 'Kurir\DashboardController::antar');
 });
 
 
