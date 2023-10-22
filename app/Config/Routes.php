@@ -63,6 +63,8 @@ $routes->group('pemilik', ['filter' => 'role'], static function ($routes) {
     $routes->get('list-user', 'Pemilik\ListUserController::index');
     $routes->get('tambah-user', 'Pemilik\ListUserController::create');
     $routes->post('add', 'Pemilik\ListUserController::add');
+    $routes->post('delete-user', 'Pemilik\ListUserController::delete');
+    $routes->post('edit-user', 'Pemilik\ListUserController::update');
 });
 $routes->group('kurir', ['filter' => 'role'], static function ($routes) {
     $routes->get('dashboard', 'Kurir\DashboardController::index');

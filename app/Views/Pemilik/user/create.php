@@ -32,6 +32,8 @@
                                     <input type="text" name="email" id="" class="form-control mt-2">
                                     <label for="stok" class="mt-2">Password</label>
                                     <input type="password" name="password" id="stok" class="form-control mt-2">
+                                    <label for="no_hp" class="mt-2">No Telepon</label>
+                                    <input type="text" name="no_telp" id="stok" class="form-control mt-2">
                                     <label for="deskripsi" class="mt-2">Role</label>
                                     <select class="form-control" name="role">
                                         <option value="1">Pemilik</option>
@@ -40,7 +42,7 @@
                                         <option value="4">Kurir</option>
                                     </select>
                                 </div>
-                                <button class="btn btn-success mt-3">Save</button>
+                                <button type="submit" class="btn btn-success mt-3">Save</button>
                             </form>
                         </div>
 
