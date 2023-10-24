@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/Auth/login'); ?>
+<?= $this->extend('layouts/auth/login'); ?>
 
 <?= $this->section('content'); ?>
 <?php

@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/Kasir/main-layouts'); ?>
+<?= $this->extend('layouts/kasir/main-layouts'); ?>
 
 <?= $this->section('head'); ?>
 
