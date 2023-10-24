@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/Pemilik/main-layouts'); ?>
+<?= $this->extend('layouts/pemilik/main-layouts'); ?>
 <?= $this->section('content'); ?>
 <section class="section dashboard">
     <div class="row">
